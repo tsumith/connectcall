@@ -1,77 +1,69 @@
 # ConnectCall
 
-**ConnectCall** is a functional 1-to-1 audio and video calling application built with Flutter.
+A seamless voice and video calling Flutter application built with Firebase, ZegoCloud, and Riverpod. 
 
-*Tagline:* Connect with anyone, anywhere.
+## 🏗 Architecture Overview
 
-## Project Description
-ConnectCall is a real-time communication application designed to facilitate seamless 1-to-1 audio and video calls. It includes user authentication, contact management, call history, and robust call controls, providing a complete calling experience.
+This project is built using a feature-based folder structure, enforcing a clear separation of concerns using Riverpod for State Management and Dependency Injection.
 
-## Features
-- **Authentication:** Sign in and Registration.
-- **Contacts:** View user list, search users, and see online/offline status.
-- **User Profile:** View and edit profile details, and log out.
-- **Audio Calling:** 1-to-1 audio calls with mute/unmute and speaker controls.
-- **Video Calling:** 1-to-1 video calls with camera toggle, front/rear switch, and microphone controls.
-- **Incoming Calls:** Accept or decline incoming calls.
-- **Call History:** View past calls including caller, time, duration, and status (Missed, Rejected, Ended, etc.).
-- **Permissions Handling:** Graceful handling of camera and microphone permissions.
+### Directory Structure
 
-## Flutter Version
-*To be documented (e.g., Flutter 3.24.x)*
-
-## Packages Used
-*To be updated as development progresses. Expected packages include state management, permissions, backend integration, and a calling SDK.*
-
-## Architecture
-The application follows a clean, structured architecture:
-```
+```text
 lib/
-├── core/         # Constants, themes, and utilities
-├── models/       # Data models
-├── services/     # API, Backend, and SDK integrations
-├── screens/      # UI screens and navigation
-├── widgets/      # Reusable UI components
-└── main.dart     # Application entry point
+├── main.dart                   # Entry point and Riverpod ProviderScope
+├── firebase_options.dart       # Firebase platform configurations
+│
+├── core/                       # App-wide configurations and utilities
+│   ├── constants/              # Global variables (Cloudinary, ZegoCloud keys, Firestore collections)
+│   ├── router/                 # GoRouter configuration for declarative navigation
+│   ├── theme/                  # Global styling, color palettes, and typography
+│   └── utils/                  # Helper classes (validators, permissions, error handling)
+│
+├── models/                     # Strongly typed data models
+│   ├── call_model.dart         # Represents a call log entry
+│   ├── user_model.dart         # Represents a user profile in Firestore
+│   ├── call_type.dart          # Enum for Voice vs Video
+│   └── call_status.dart        # Enum for Incoming, Outgoing, Missed
+│
+├── screens/                    # Full-page UI screens
+│   ├── splash/                 # Initial loading and auth-check screen
+│   ├── auth/                   # Authentication (Login)
+│   └── home/                   # Main authenticated area
+│       ├── home_screen.dart    # Shell with custom bottom navigation bar
+│       └── views/              # Sub-tabs for the home screen
+│           ├── dashboard_view.dart      # Welcome page with horizontal recents & contacts
+│           ├── contacts_view.dart       # Vertical list of all contacts
+│           ├── recent_calls_view.dart   # Vertical list of all call history
+│           └── profile_view.dart        # User profile settings & sign out
+│
+├── services/                   # Business logic and external API integrations
+│   ├── auth_service.dart       # Firebase Authentication wrapper
+│   ├── user_service.dart       # Firestore User CRUD operations
+│   ├── calling_service.dart    # ZegoCloud WebRTC integration
+│   └── image_upload_service.dart # Cloudinary multipart image uploading
+│
+└── widgets/                    # Reusable UI components
+    ├── call_button.dart        # Shared call initiation button
+    ├── call_history_card.dart  # Formatted call log list tile
+    ├── call_overlay.dart       # Floating incoming call overlay
+    ├── custom_bottom_nav_bar.dart # Floating navigation widget
+    ├── edit_profile_dialog.dart   # Interactive dialog to update name/avatar
+    ├── horizontal_recent_calls.dart # Dashboard horizontal list
+    └── user_card.dart          # Formatted contact list tile
 ```
 
-## Backend Used
-*To be selected (e.g., Firebase Authentication & Firestore)*
+## 🛠 Tech Stack
 
-## Calling SDK Used
-*To be selected (e.g., ZEGOCLOUD, Agora, WebRTC, or Stream Video)*
+*   **Framework:** Flutter
+*   **State Management / DI:** Riverpod (`flutter_riverpod`)
+*   **Routing:** GoRouter
+*   **Authentication & Database:** Firebase Auth + Cloud Firestore
+*   **Voice/Video Engine:** ZegoCloud (Zego UI Kits)
+*   **Media Storage:** Cloudinary REST API (`http`, `image_picker`)
 
-## Setup Instructions
-1. Clone the repository:
-   ```bash
-   git clone <repository_url>
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd connectcall
-   ```
-3. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
-4. Configure the environment variables for the chosen Backend and Calling SDK (see below).
-5. Run the application:
-   ```bash
-   flutter run
-   ```
+## 🚀 Getting Started
 
-## Environment Variables / Configuration
-To securely manage secrets, create a `.env` file in the root directory (this file is ignored by Git). Add your API keys and configuration values as needed:
-
-```env
-# Example .env file structure
-BACKEND_API_KEY=your_backend_api_key
-CALLING_SDK_APP_ID=your_calling_sdk_app_id
-CALLING_SDK_APP_SIGN=your_calling_sdk_app_sign
-```
-
-## Known Limitations
-*To be documented (e.g., limitations with background push notifications or unsupported platforms).*
-
-## AI Tools Used
-*To be disclosed by the developer (e.g., Gemini, Copilot, Cursor) along with how they were utilized.*
+1. Set up your Firebase project and download `google-services.json` (Android) / `GoogleService-Info.plist` (iOS).
+2. Create a ZegoCloud project and put your App ID and App Sign in `lib/core/constants/app_constants.dart`.
+3. Put your Cloudinary Cloud Name and Unsigned Upload Preset in `lib/core/constants/app_constants.dart`.
+4. Run the app: `flutter run`
