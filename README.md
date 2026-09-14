@@ -1,12 +1,37 @@
 # ConnectCall
 
-A seamless voice and video calling Flutter application built with Firebase, ZegoCloud, and Riverpod. 
+*Connect with anyone, anywhere.*
 
-## 🏗 Architecture Overview
+## 📝 Project Description
+ConnectCall is a functional 1-to-1 voice and video calling application built with Flutter. It allows users to create accounts, view contacts, make and receive real-time audio and video calls, and check their call history. The application emphasizes clean architecture, robust state management, and real-time backend synchronization.
 
-This project is built using a feature-based folder structure, enforcing a clear separation of concerns using Riverpod for State Management and Dependency Injection.
+## ✨ Features
+- **Authentication**: Secure sign in and account creation via Firebase Authentication.
+- **Contacts**: Browse a list of registered users with online/offline status indicators.
+- **Audio Calling**: 1-to-1 functional audio calls with mute/unmute and speaker controls.
+- **Video Calling**: 1-to-1 functional video calls with camera toggling, front/rear camera switching, and microphone controls.
+- **Incoming Calls**: Receive calls, with options to accept or decline.
+- **Call History**: View past calls (Caller/callee, Call type, Time, Duration, and Call status such as Missed, Rejected, or Completed).
+- **User Profile**: View and edit user profile details, including uploading custom avatars.
+- **Permissions Handling**: Proper handling of Camera and Microphone permissions prior to calls.
+- **Dynamic UI/UX**: Custom bottom navigation bar, dynamic call overlays, and dark/light mode support.
 
-### Directory Structure
+## 📱 Flutter Version
+- **Flutter SDK:** `^3.12.2` (or above)
+
+## 📦 Packages Used
+- `flutter_riverpod` (^3.4.3): State management and dependency injection.
+- `firebase_core` (^4.14.0), `firebase_auth` (^6.6.1), `cloud_firestore` (^6.9.0): Backend integration (Authentication, Real-time Database).
+- `zego_uikit_prebuilt_call` (^4.24.4): Real-time calling SDK for WebRTC.
+- `go_router` (^18.0.1): Declarative and scalable routing.
+- `flutter_dotenv` (^5.1.0): Secure environment variable management.
+- `permission_handler` (^12.0.3): Managing and requesting device permissions.
+- `image_picker` (^1.2.3), `http` (^1.6.0): Image selection and HTTP requests for uploading to Cloudinary.
+- `shared_preferences` (^2.5.5): Local persistent storage.
+- `intl` (^0.20.2): Date and time formatting for call history.
+
+## 🏗 Architecture
+This project is built using a feature-based folder structure, enforcing a clear separation of concerns.
 
 ```text
 lib/
@@ -14,56 +39,61 @@ lib/
 ├── firebase_options.dart       # Firebase platform configurations
 │
 ├── core/                       # App-wide configurations and utilities
-│   ├── constants/              # Global variables (Cloudinary, ZegoCloud keys, Firestore collections)
-│   ├── router/                 # GoRouter configuration for declarative navigation
-│   ├── theme/                  # Global styling, color palettes, and typography
-│   └── utils/                  # Helper classes (validators, permissions, error handling)
+│   ├── constants/              # Global variables and environment keys
+│   ├── router/                 # GoRouter configuration
+│   ├── theme/                  # Global styling, light/dark themes
+│   └── utils/                  # Helper classes and formatters
 │
-├── models/                     # Strongly typed data models
-│   ├── call_model.dart         # Represents a call log entry
-│   ├── user_model.dart         # Represents a user profile in Firestore
-│   ├── call_type.dart          # Enum for Voice vs Video
-│   └── call_status.dart        # Enum for Incoming, Outgoing, Missed
+├── models/                     # Strongly typed data models (User, Call, CallStatus)
 │
-├── screens/                    # Full-page UI screens
-│   ├── splash/                 # Initial loading and auth-check screen
-│   ├── auth/                   # Authentication (Login)
-│   └── home/                   # Main authenticated area
-│       ├── home_screen.dart    # Shell with custom bottom navigation bar
-│       └── views/              # Sub-tabs for the home screen
-│           ├── dashboard_view.dart      # Welcome page with horizontal recents & contacts
-│           ├── contacts_view.dart       # Vertical list of all contacts
-│           ├── recent_calls_view.dart   # Vertical list of all call history
-│           └── profile_view.dart        # User profile settings & sign out
+├── screens/                    # Full-page UI screens (splash, auth, home, views)
 │
 ├── services/                   # Business logic and external API integrations
-│   ├── auth_service.dart       # Firebase Authentication wrapper
-│   ├── user_service.dart       # Firestore User CRUD operations
-│   ├── calling_service.dart    # ZegoCloud WebRTC integration
-│   └── image_upload_service.dart # Cloudinary multipart image uploading
+│   ├── auth_service.dart       
+│   ├── user_service.dart       
+│   ├── calling_service.dart    
+│   └── image_upload_service.dart
 │
-└── widgets/                    # Reusable UI components
-    ├── call_button.dart        # Shared call initiation button
-    ├── call_history_card.dart  # Formatted call log list tile
-    ├── call_overlay.dart       # Floating incoming call overlay
-    ├── custom_bottom_nav_bar.dart # Floating navigation widget
-    ├── edit_profile_dialog.dart   # Interactive dialog to update name/avatar
-    ├── horizontal_recent_calls.dart # Dashboard horizontal list
-    └── user_card.dart          # Formatted contact list tile
+└── widgets/                    # Reusable UI components (buttons, cards, overlays)
 ```
 
-## 🛠 Tech Stack
+## 🗄 Backend Used
+- **Firebase Authentication**: Used for real authentication (Email/Password).
+- **Firebase Cloud Firestore**: Used as the primary real-time database to store user profiles, online statuses, and call history logs.
+- **Cloudinary**: Used via REST API for storing and serving user profile avatars.
 
-*   **Framework:** Flutter
-*   **State Management / DI:** Riverpod (`flutter_riverpod`)
-*   **Routing:** GoRouter
-*   **Authentication & Database:** Firebase Auth + Cloud Firestore
-*   **Voice/Video Engine:** ZegoCloud (Zego UI Kits)
-*   **Media Storage:** Cloudinary REST API (`http`, `image_picker`)
+## 📞 Calling SDK Used
+- **ZegoCloud (Zego UI Kits)**: Selected for its robust Flutter support, pre-built UI components that significantly speed up development, cross-platform stability, and reliable real-time communication infrastructure for both audio and video calls. It seamlessly handles connection states and background integrations.
 
-## 🚀 Getting Started
+## 🚀 Setup Instructions
+1. **Clone the repository.**
+2. **Install dependencies:** Run `flutter pub get`.
+3. **Configure Firebase:**
+   - Set up a Firebase project and add Android/iOS apps.
+   - Download and place `google-services.json` (Android) / `GoogleService-Info.plist` (iOS) in their respective directories.
+4. **Configure ZegoCloud:**
+   - Create a project on the ZegoCloud console.
+   - Obtain the App ID and App Sign.
+5. **Set up Environment Variables:** Create a `.env` file in the root directory (see *Environment variables/configuration* below).
+6. **Run the app:** Use `flutter run`.
 
-1. Set up your Firebase project and download `google-services.json` (Android) / `GoogleService-Info.plist` (iOS).
-2. Create a ZegoCloud project and put your App ID and App Sign in `lib/core/constants/app_constants.dart`.
-3. Put your Cloudinary Cloud Name and Unsigned Upload Preset in `lib/core/constants/app_constants.dart`.
-4. Run the app: `flutter run`
+## ⚙️ Environment Variables/Configuration
+Create a `.env` file in the root directory of the project with the following keys. Make sure the values match your backend services.
+
+```env
+# ZegoCloud 
+ZEG0_APP_ID=your_zego_app_id
+ZEG0_APP_SIGN=your_zego_app_sign
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_UPLOAD_PRESET=your_cloudinary_upload_preset
+```
+
+## ⚠️ Known Limitations
+- Push notifications for background incoming calls may require additional native platform setup depending on the OS (APNs for iOS, FCM for Android via ZegoCloud console).
+- App currently assumes a reliable internet connection; edge cases like switching networks during an active call might cause temporary disconnections.
+- Cloudinary requires an unsigned upload preset to function properly from the client side.
+
+## 🤖 AI Tools Used
+- **Gemini  via Antigravity IDE**: Used for AI-assisted development, code generation, refactoring, and documentation drafting.
